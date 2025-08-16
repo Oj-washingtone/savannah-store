@@ -1,0 +1,36 @@
+services:
+  db:
+    image: postgres:16
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5433:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      target: builder
+    container_name: savannah_store_apis
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: go run ./cmd/server
+
+volumes:
+  db-data:
