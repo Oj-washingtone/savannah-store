@@ -1,0 +1,28 @@
+basePath: /api
+host: localhost:8080
+info:
+  contact: {}
+  description: This is the API documentation for Savannah Store.
+  title: Savannah Store API
+  version: "1.0"
+paths:
+  /auth/login:
+    get:
+      description: Redirects the user to the Auth0/Google login page for authentication.
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: Redirects to Auth0/Google login page
+          schema:
+            type: string
+        "500":
+          description: Failed to initialize authenticator
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Login endpoint
+      tags:
+      - auth
+swagger: "2.0"

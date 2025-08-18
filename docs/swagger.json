@@ -1,0 +1,42 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is the API documentation for Savannah Store.",
+        "title": "Savannah Store API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api",
+    "paths": {
+        "/auth/login": {
+            "get": {
+                "description": "Redirects the user to the Auth0/Google login page for authentication.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login endpoint",
+                "responses": {
+                    "302": {
+                        "description": "Redirects to Auth0/Google login page",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to initialize authenticator",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
