@@ -9,7 +9,15 @@ func RegisterProductRoutes(router *gin.RouterGroup) {
 	products := router.Group("/products")
 
 	{
-		products.POST("/categories", handlers.AddProductCategory)
-		products.GET("/categories", handlers.GetProductCategories)
+		// product categories
+
+		products.POST("/categories/create", handlers.AddProductCategory)
+		products.GET("/categories", handlers.ListCategories)
+		products.PATCH("/categories/:id", handlers.UpdateCategory)
+
+		// products
+		products.POST("/create", handlers.CreateProduct)
+		products.GET("/:id", handlers.GetProductById)
+		products.GET("/", handlers.ListProducts)
 	}
 }

@@ -15,7 +15,8 @@ type Product struct {
 
 type ProductCategory struct {
 	BaseModel
-	Name string `json:"name"`
+	Name     string     `json:"name"`
+	ParentId *uuid.UUID `db:"parent_id" json:"parentId,omitempty"`
 }
 
 type ProductImage struct {

@@ -1,0 +1,2 @@
+ALTER TABLE categories
+ADD COLUMN parent_id UUID REFERENCES categories (id) ON DELETE CASCADE;

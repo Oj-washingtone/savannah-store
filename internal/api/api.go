@@ -6,4 +6,5 @@ import (
 
 func AppRoutes(router *gin.RouterGroup) {
 	RegisterAuthRoutes(router)
+	RegisterProductRoutes(router)
 }
