@@ -78,13 +78,12 @@ func RegisterAuthRoutes(router *gin.RouterGroup) {
 				}
 
 				user = newUser
+
 			}
 
 			c.IndentedJSON(http.StatusOK, gin.H{
-				"user":        user,
-				"oauth_token": token,
-				"id_token":    idToken,
-				"user_claims": claims,
+				"user":  user,
+				"token": token.Extra("id_token"),
 			})
 		})
 	}

@@ -19,5 +19,8 @@ func RegisterProductRoutes(router *gin.RouterGroup) {
 		products.POST("/create", handlers.CreateProduct)
 		products.GET("/:id", handlers.GetProductById)
 		products.GET("/", handlers.ListProducts)
+		products.PATCH("/:id", handlers.UpdateProduct)
+		products.DELETE("/:id", handlers.DeleteProduct)
+
 	}
 }

@@ -123,7 +123,11 @@ func (r *productRepository) Update(ctx context.Context, product *model.Product) 
 }
 
 func (r *productRepository) Delete(ctx context.Context, id uuid.UUID) error {
-	query := `DELETE FROM products WHERE id = $1`
+	query := `
+		UPDATE products
+		SET deleted_at = now()
+		WHERE id = $1 AND deleted_at IS NULL
+	`
 	_, err := r.db.Pool.Exec(ctx, query, id)
 	return err
 }

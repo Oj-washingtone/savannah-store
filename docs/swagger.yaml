@@ -9,6 +9,13 @@ definitions:
     required:
     - name
     type: object
+  handlers.ItemBody:
+    properties:
+      product_id:
+        type: string
+      quantity:
+        type: integer
+    type: object
   handlers.createProductBody:
     properties:
       categoryId:
@@ -28,6 +35,66 @@ definitions:
       name:
         type: string
       parentId:
+        type: string
+    type: object
+  handlers.updateProductBody:
+    properties:
+      categoryId:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: integer
+      stock:
+        type: integer
+    type: object
+  model.CartItem:
+    properties:
+      cartId:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      price:
+        type: integer
+      productId:
+        type: string
+      quantity:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  model.OrderStatus:
+    enum:
+    - pending
+    - shipped
+    - delivered
+    - cancelled
+    type: string
+    x-enum-varnames:
+    - StatusPending
+    - StatusShipped
+    - StatusDelivered
+    - StatusCancelled
+  model.Orders:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      paid:
+        type: boolean
+      status:
+        $ref: '#/definitions/model.OrderStatus'
+      total:
+        description: capture in cents why ?
+        type: integer
+      updatedAt:
+        type: string
+      userId:
         type: string
     type: object
   model.Product:
@@ -88,6 +155,237 @@ paths:
       summary: Login endpoint
       tags:
       - auth
+  /cart:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all items from the authenticated user's shopping cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: cart_id and list of items
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get items in the cart
+      tags:
+      - Shopping Cart
+  /cart/create:
+    post:
+      consumes:
+      - application/json
+      description: Add a product to the shopping cart
+      parameters:
+      - description: Item to add
+        in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.ItemBody'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.CartItem'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Add product to cart
+      tags:
+      - Shopping Cart
+  /cart/remove/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove a product from the shopping cart by its item ID
+      parameters:
+      - description: Cart Item ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Remove item from cart
+      tags:
+      - Shopping Cart
+  /cart/update/quantity/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Update the quantity of a specific cart item by its ID
+      parameters:
+      - description: Cart Item ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated quantity
+        in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.ItemBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Item quantity updated successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update quantity of an item in the cart
+      tags:
+      - Shopping Cart
+  /orders:
+    get:
+      consumes:
+      - application/json
+      description: Fetches all orders with associated order items.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of all orders
+          schema:
+            items:
+              $ref: '#/definitions/model.Orders'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get all orders
+      tags:
+      - Orders
+  /orders/create:
+    post:
+      consumes:
+      - application/json
+      description: Creates an order based on the user's cart and persists order items.
+        Calculates total automatically. Requires user authentication.
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Order created successfully
+          schema:
+            $ref: '#/definitions/model.Orders'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Cart not found or empty
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new order for the authenticated user
+      tags:
+      - Orders
   /products:
     get:
       description: Returns paginated list of product
@@ -127,6 +425,38 @@ paths:
       tags:
       - products
   /products/{id}:
+    delete:
+      description: Soft deletes a product by its ID. The product remains in the database
+      parameters:
+      - description: Product ID (UUID)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product deleted successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid product ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to delete product
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a product
+      tags:
+      - products
     get:
       consumes:
       - application/json
@@ -163,6 +493,50 @@ paths:
               type: string
             type: object
       summary: Get product by ID
+      tags:
+      - products
+    patch:
+      consumes:
+      - application/json
+      description: Update a Product by ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Product data
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.updateProductBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Product'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a product
       tags:
       - products
   /products/categories:

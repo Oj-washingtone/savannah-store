@@ -58,3 +58,28 @@ func (r *userRepository) GetByEmail(ctx context.Context, email string) (*model.U
 
 	return user, nil
 }
+
+func (r *userRepository) GetByAuth0Id(ctx context.Context, auth0Id string) (*model.User, error) {
+	row := r.db.Pool.QueryRow(ctx,
+		`SELECT id, name, email, role, auth0_id, created_at, updated_at 
+		 FROM users 
+		 WHERE auth0_id=$1`,
+		auth0Id,
+	)
+
+	user := &model.User{}
+	err := row.Scan(
+		&user.ID,
+		&user.Name,
+		&user.Email,
+		&user.Role,
+		&user.Auth0Id,
+		&user.CreatedAt,
+		&user.UpdatedAt,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
