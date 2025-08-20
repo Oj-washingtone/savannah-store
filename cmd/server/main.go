@@ -4,6 +4,11 @@
 // @host localhost:8080
 // @BasePath /api
 
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Type "Bearer" followed by a space and JWT token.
+
 package main
 
 import (

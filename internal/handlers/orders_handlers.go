@@ -19,6 +19,7 @@ import (
 // @Tags Orders
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Success 201 {object} model.Orders "Order created successfully"
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 404 {object} map[string]string "Cart not found or empty"

@@ -382,6 +382,7 @@ paths:
               type: string
             type: object
       security:
+      - BearerAuth: []
       - ApiKeyAuth: []
       summary: Create a new order for the authenticated user
       tags:
@@ -676,4 +677,10 @@ paths:
       summary: Add a new product
       tags:
       - products
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
