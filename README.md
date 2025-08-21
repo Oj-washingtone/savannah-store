@@ -78,6 +78,33 @@ Savannah Store is a modern, scalable e-commerce backend API built with Go, desig
 - `POST /api/auth/login` — Login via Auth0
 - `GET /api/auth/auth0/callback` — Auth0 callback
 
+#### Auth Step 1:
+
+step 1 Open the Login URL
+
+Open the following URL in your browser:
+
+http://savanna.apis.linxs.co.ke/api/auth/login or http://localhost:8080/api/auth/login
+
+This will redirect you to the Auth0 login page
+Enter credentials and login
+
+After successful login, Auth0 will redirect you back to the callback URL configured in the application (`/auth/auth0/callback`)
+and be redirected to the browser page having your token
+
+```json
+{
+  "user": {
+    "id": "user-uuid",
+    "name": "John Doe",
+    "email": "johndoe@example.com",
+    "role": "customer",
+    "auth0Id": "auth0|123456789"
+  },
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
 ### Products
 
 - `POST /api/products/create` — Add new product
