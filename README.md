@@ -178,3 +178,36 @@ OrderItems: OrderID, ProductID, Quantity, Price
 ```
 
 ---
+
+### .env file
+
+THe following are the fields you need in .env while running the application
+
+```
+PORT=8080
+
+
+DB_USER=
+DB_PASSWORD=
+DB_NAME=
+DB_HOST=
+DB_PORT=
+
+# Auth 0
+
+AUTH0_DOMAIN=
+AUTH0_CLIENT_ID=
+AUTH0_CLIENT_SECRET=
+AUTH0_CALLBACK_URL=
+
+
+# Email
+RESEND_KEY =
+ADMIN_EMAIL =
+
+# SMS
+AFRICASTALKING_API_KEY =
+AFRICASTALKING_URL =
+AFRICASTALKING_USERNAME =
+
+```
