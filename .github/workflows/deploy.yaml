@@ -74,6 +74,9 @@ jobs:
             # Download docker-compose.prod.yml from GitHub
             curl -O -L https://raw.githubusercontent.com/${{ github.repository }}/main/docker-compose.prod.yml
 
+            rm -rf migrations
+            scp -r ${{ github.workspace }}/migrations root@${{ secrets.CONTABO_HOST }}:/opt/savannah-store/migrations
+
 
             #Create ENV
             echo "DB_USER=${{ secrets.DB_USER }}" > .env
