@@ -63,16 +63,11 @@ Savannah Store is a modern, scalable e-commerce backend API built with Go, desig
    cd savannah-store
    ```
 2. Configure environment variables in `.env` (see sample in docs).
-3. Run database migrations:
+3. Run
    ```sh
-   # Example using migrate CLI
-   migrate -path migrations -database "postgres://user:pass@localhost:5432/dbname?sslmode=disable" up
+    docker compose up
    ```
-4. Start the server:
-   ```sh
-   go run cmd/server/main.go
-   ```
-5. Access Swagger UI at [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)
+4. Access Swagger UI at [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)
 
 ---
 

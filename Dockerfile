@@ -19,5 +19,9 @@ FROM debian:bookworm-slim
 WORKDIR /app
 COPY --from=builder /app/server /app/server
 
+# Install CA certificates
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+
+
 EXPOSE 8080
 CMD ["/app/server"]
