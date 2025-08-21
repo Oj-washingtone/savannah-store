@@ -17,9 +17,6 @@ Savannah Store is a modern, scalable e-commerce backend API built with Go, desig
   - [Orders](#orders)
 - [Data Models](#data-models)
 - [Authentication & Security](#authentication--security)
-- [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
 
 ---
 
@@ -56,8 +53,7 @@ Savannah Store is a modern, scalable e-commerce backend API built with Go, desig
 ### Prerequisites
 
 - Go 1.24+
-- PostgreSQL
-- Docker (optional for containerization)
+- Docker
 
 ### Setup
 
@@ -167,37 +163,3 @@ OrderItems: OrderID, ProductID, Quantity, Price
 - Role-based access for admin/customer endpoints
 
 ---
-
-## Testing
-
-Savannah Store includes several types of tests to ensure code quality and reliability:
-
-### Unit Tests
-
-Unit tests are located in the `test` folder and cover core models, middleware, and handlers:
-
-- `unit_api_response_handler_test.go` — Tests for API response helpers
-- `unit_auth_middleware_test.go` — Tests for authentication middleware
-- `unit_product_model_test.go` — Tests for the Product model
-- `unit_user_model_test.go` — Tests for the User model and roles
-- `unit_cart_model_test.go` — Tests for the Cart and CartItem models
-- `unit_orders_model_test.go` — Tests for the Orders model and status constants
-
-### Integration & End-to-End Tests
-
-- `integration_test.go` — Integration tests for routes, handlers, and DB queries
-- `e2e_test.go` — End-to-end tests for the application
-
-### Running Tests
-
-To run all unit, integration, and e2e tests:
-
-```sh
-go test ./test/...
-```
-
-You can also run a specific test file:
-
-```sh
-go test ./test/unit_product_model_test.go
-```

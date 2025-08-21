@@ -20,7 +20,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./env/.env:/app/.env:ro
+      - /opt/savannah-store/.env:/app/.env:ro
     # environment:
     #   DB_HOST: db
     #   DB_PORT: 5432
