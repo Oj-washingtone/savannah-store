@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -118,7 +119,14 @@ func CreateOrder(c *gin.Context) {
 		return
 	}
 
-	// TODO: send SMS
+	// send SMS
+	if user.Phone != "" {
+		err := service.SendSMS(user.Phone, "Your order has been received and is being processed")
+
+		if err != nil {
+			fmt.Println("Failed to send SMS:", err)
+		}
+	}
 
 	// email to admin
 
