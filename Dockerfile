@@ -14,7 +14,7 @@ COPY . .
 RUN go build -o server ./cmd/server
 
 # Final production image
-FROM gcr.io/distroless/base-debian11
+FROM debian:bookworm-slim
 
 WORKDIR /app
 COPY --from=builder /app/server /app/server
