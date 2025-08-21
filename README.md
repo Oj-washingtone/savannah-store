@@ -1,0 +1,203 @@
+# Savannah Store
+
+Savannah Store is a modern, scalable e-commerce backend API built with Go, designed to power online stores with robust features for product management, shopping carts, orders, authentication, and more. It follows clean architecture principles and leverages industry-standard libraries for security, documentation, and developer experience.
+
+---
+
+## Table of Contents
+
+- [Features](#features)
+- [Architecture](#architecture)
+- [Getting Started](#getting-started)
+- [API Endpoints](#api-endpoints)
+  - [Authentication](#authentication)
+  - [Products](#products)
+  - [Categories](#categories)
+  - [Cart](#cart)
+  - [Orders](#orders)
+- [Data Models](#data-models)
+- [Authentication & Security](#authentication--security)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## Features
+
+- **User Authentication** (Auth0, JWT, OIDC)
+- **Product & Category Management**
+- **Shopping Cart** (add, remove, update items)
+- **Order Processing** (create, list, update status)
+- **Role-based Access Control** (Customer, Admin, Super Admin)
+- **RESTful API** with [Swagger UI](http://localhost:8080/swagger/index.html)
+- **PostgreSQL** database integration
+- **Environment-based configuration**
+- **Automated Testing** (integration & e2e)
+
+---
+
+## Architecture
+
+- **cmd/server**: Application entrypoint
+- **internal/api**: API route registration
+- **internal/handlers**: HTTP request handlers
+- **internal/model**: Data models (User, Product, Cart, Order, etc.)
+- **internal/repocitory**: Database repositories (CRUD logic)
+- **internal/middleware**: Auth & request middleware
+- **internal/service**: External integrations (email, SMS)
+- **internal/database**: DB connection logic
+- **migrations**: SQL migration scripts
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Go 1.24+
+- PostgreSQL
+- Docker (optional for containerization)
+
+### Setup
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/Oj-washingtone/savannah-store.git
+   cd savannah-store
+   ```
+2. Configure environment variables in `.env` (see sample in docs).
+3. Run database migrations:
+   ```sh
+   # Example using migrate CLI
+   migrate -path migrations -database "postgres://user:pass@localhost:5432/dbname?sslmode=disable" up
+   ```
+4. Start the server:
+   ```sh
+   go run cmd/server/main.go
+   ```
+5. Access Swagger UI at [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)
+
+---
+
+## API Endpoints
+
+### Authentication
+
+- `POST /api/auth/login` — Login via Auth0
+- `GET /api/auth/auth0/callback` — Auth0 callback
+
+### Products
+
+- `POST /api/products/create` — Add new product
+- `GET /api/products/:id` — Get product by ID
+- `GET /api/products` — List products (pagination)
+- `PATCH /api/products/:id` — Update product
+- `DELETE /api/products/:id` — Delete product
+
+### Categories
+
+- `POST /api/products/categories/create` — Add category
+- `GET /api/products/categories` — List categories
+- `PATCH /api/products/categories/:id` — Update category
+
+### Cart
+
+- `POST /api/cart/create` — Add item to cart
+- `DELETE /api/cart/remove/:id` — Remove item from cart
+- `GET /api/cart` — List cart items
+- `PATCH /api/cart/update/quantity/:id` — Update item quantity
+
+### Orders
+
+- `POST /api/orders/create` — Create order (requires authentication)
+- `GET /api/orders` — List all orders
+
+---
+
+## Data Models
+
+### User
+
+```go
+Auth0Id   string
+Name      string
+Email     string
+Phone     string
+Role      string // customer, admin, super_admin
+```
+
+### Product
+
+```go
+CategoryID  uuid.UUID
+Name        string
+Description string
+Price       int64
+Stock       int
+```
+
+### ProductCategory
+
+```go
+Name     string
+ParentId *uuid.UUID
+```
+
+### Cart & CartItem
+
+```go
+Cart:  UserId uuid.UUID
+CartItem: CartId, ProductId, Quantity, Price
+```
+
+### Orders & OrderItems
+
+```go
+Orders:  UserID, Status, Total, Paid
+OrderItems: OrderID, ProductID, Quantity, Price
+```
+
+---
+
+## Authentication & Security
+
+- Uses Auth0 and JWT for secure authentication
+- All protected routes require `Bearer` token in `Authorization` header
+- Role-based access for admin/customer endpoints
+
+---
+
+## Testing
+
+Savannah Store includes several types of tests to ensure code quality and reliability:
+
+### Unit Tests
+
+Unit tests are located in the `test` folder and cover core models, middleware, and handlers:
+
+- `unit_api_response_handler_test.go` — Tests for API response helpers
+- `unit_auth_middleware_test.go` — Tests for authentication middleware
+- `unit_product_model_test.go` — Tests for the Product model
+- `unit_user_model_test.go` — Tests for the User model and roles
+- `unit_cart_model_test.go` — Tests for the Cart and CartItem models
+- `unit_orders_model_test.go` — Tests for the Orders model and status constants
+
+### Integration & End-to-End Tests
+
+- `integration_test.go` — Integration tests for routes, handlers, and DB queries
+- `e2e_test.go` — End-to-end tests for the application
+
+### Running Tests
+
+To run all unit, integration, and e2e tests:
+
+```sh
+go test ./test/...
+```
+
+You can also run a specific test file:
+
+```sh
+go test ./test/unit_product_model_test.go
+```
