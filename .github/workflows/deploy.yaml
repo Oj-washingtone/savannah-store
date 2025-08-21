@@ -68,15 +68,16 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
 
           script: |
-            mkdir -p /opt/savannah-store
-            cd /opt/savannah-store
+            cd /opt
 
-            # Download docker-compose.prod.yml from GitHub
-            curl -O -L https://raw.githubusercontent.com/${{ github.repository }}/main/docker-compose.prod.yml
-
-            rm -rf migrations
-            scp -r ${{ github.workspace }}/migrations root@${{ secrets.CONTABO_HOST }}:/opt/savannah-store/migrations
-
+            if [ -d "savannah-store/.git" ]; then
+                cd savannah-store
+                git reset --hard
+                git pull origin main
+            else
+                git clone git@github.com:Oj-washingtone/savannah-store.git savannah-store
+                cd savannah-store
+            fi
 
             #Create ENV
             echo "DB_USER=${{ secrets.DB_USER }}" > .env
