@@ -1,4 +1,4 @@
-name: Deploy to K8
+name: CI/CD Pipeline
 
 on:
   push:
@@ -23,9 +23,33 @@ jobs:
 
       - name: Display coverage
         run: go tool cover -func=coverage.out
-  deploy:
+  build:
     runs-on: ubuntu-latest
     needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository }}/api-service
+          docker build -t $IMAGE_NAME:latest .
+
+      - name: Push Docker image
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository }}/api-service
+          docker push $IMAGE_NAME:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
 
     steps:
       - name: Checkout code
