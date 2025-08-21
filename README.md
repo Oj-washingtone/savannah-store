@@ -1,6 +1,6 @@
 # Savannah Store
 
-Savannah Store is a modern, scalable e-commerce backend API built with Go, designed to power online stores with robust features for product management, shopping carts, orders, authentication, and more. It follows clean architecture principles and leverages industry-standard libraries for security, documentation, and developer experience.
+Deployment of the API is done on Contabo VPS
 
 ---
 
@@ -175,13 +175,5 @@ CartItem: CartId, ProductId, Quantity, Price
 Orders:  UserID, Status, Total, Paid
 OrderItems: OrderID, ProductID, Quantity, Price
 ```
-
----
-
-## Authentication & Security
-
-- Uses Auth0 and JWT for secure authentication
-- All protected routes require `Bearer` token in `Authorization` header
-- Role-based access for admin/customer endpoints
 
 ---
