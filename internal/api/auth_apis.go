@@ -74,8 +74,8 @@ func RegisterAuthRoutes(router *gin.RouterGroup) {
 
 				if err := userRepo.Create(c.Request.Context(), newUser); err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{
-						"error": "failed to create user",
-						// "details": err.Error(),
+						"error":   "failed to create user",
+						"details": err.Error(),
 					})
 					return
 				}
