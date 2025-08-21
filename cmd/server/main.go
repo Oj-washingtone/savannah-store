@@ -1,7 +1,7 @@
 // @title Savannah Store API
 // @version 1.0
 // @description This is the API documentation for Savannah Store.
-// @host localhost:8080
+// @host savanna.apis.linxs.co.ke
 // @BasePath /api
 
 // @securityDefinitions.apikey BearerAuth

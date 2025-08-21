@@ -129,7 +129,7 @@ definitions:
       updatedAt:
         type: string
     type: object
-host: localhost:8080
+host: savanna.apis.linxs.co.ke
 info:
   contact: {}
   description: This is the API documentation for Savannah Store.
