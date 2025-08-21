@@ -1,5 +1,6 @@
 # Savannah Store
 
+Built in Go, with PostgreSQL and Auth0 for authentication
 Deployment of the API is done on Contabo VPS
 
 ---
