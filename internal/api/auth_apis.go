@@ -72,10 +72,10 @@ func RegisterAuthRoutes(router *gin.RouterGroup) {
 
 				newUser.ID = uuid.New()
 
-				if err := userRepo.Create(c.Request.Context(), newUser); err != nil {
-					c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create user"})
-					return
-				}
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"error":   "failed to create user",
+					"details": err.Error(),
+				})
 
 				user = newUser
 
