@@ -30,7 +30,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./migrations:/migrations
+      - /opt/savannah-store/migrations:/migrations
     environment:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
