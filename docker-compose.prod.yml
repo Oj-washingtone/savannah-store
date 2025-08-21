@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   db:
     image: postgres:16
@@ -21,6 +19,7 @@ services:
       - db
     volumes:
       - /opt/savannah-store/.env:/app/.env:ro
+      - /opt/savannah-store/migrations:/migrations
 
     ports:
       - "8080:8080"
