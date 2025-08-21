@@ -76,25 +76,25 @@ jobs:
 
 
             #Create ENV
-            echo "DB_USER=${{ secrets.DB_USER }}" > .env.prod
-            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env.prod
-            echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env.prod
-            echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.prod
-            echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env.prod
+            echo "DB_USER=${{ secrets.DB_USER }}" > .env
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+            echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+            echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+            echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
 
-            echo "AUTH0_DOMAIN=${{ secrets.AUTH0_DOMAIN }}" >> .env.prod
-            echo "AUTH0_CLIENT_ID=${{ secrets.AUTH0_CLIENT_ID }}" >> .env.prod
-            echo "AUTH0_CLIENT_SECRET=${{ secrets.AUTH0_CLIENT_SECRET }}" >> .env.prod
-            echo "AUTH0_CALLBACK_URL=${{ secrets.AUTH0_CALLBACK_URL }}" >> .env.prod
+            echo "AUTH0_DOMAIN=${{ secrets.AUTH0_DOMAIN }}" >> .env
+            echo "AUTH0_CLIENT_ID=${{ secrets.AUTH0_CLIENT_ID }}" >> .env
+            echo "AUTH0_CLIENT_SECRET=${{ secrets.AUTH0_CLIENT_SECRET }}" >> .env
+            echo "AUTH0_CALLBACK_URL=${{ secrets.AUTH0_CALLBACK_URL }}" >> .env
 
-            echo "RESEND_KEY=${{ secrets.RESEND_KEY }}" >> .env.prod
-            echo "ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}" >> .env.prod
+            echo "RESEND_KEY=${{ secrets.RESEND_KEY }}" >> .env
+            echo "ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}" >> .env
 
-            echo "AFRICASTALKING_API_KEY=${{ secrets.AFRICASTALKING_API_KEY }}" >> .env.prod
-            echo "AFRICASTALKING_URL=${{ secrets.AFRICASTALKING_URL }}" >> .env.prod
-            echo "AFRICASTALKING_USERNAME=${{ secrets.AFRICASTALKING_USERNAME }}" >> .env.prod
+            echo "AFRICASTALKING_API_KEY=${{ secrets.AFRICASTALKING_API_KEY }}" >> .env
+            echo "AFRICASTALKING_URL=${{ secrets.AFRICASTALKING_URL }}" >> .env
+            echo "AFRICASTALKING_USERNAME=${{ secrets.AFRICASTALKING_USERNAME }}" >> .env
 
             # Pull the latest image and deploy with Docker Compose
             docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-            docker compose -f docker-compose.prod.yml --env-file .env.prod pull
-            docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --force-recreate
+            docker compose -f docker-compose.prod.yml --env-file .env pull
+            docker compose -f docker-compose.prod.yml --env-file .env up -d --force-recreate
