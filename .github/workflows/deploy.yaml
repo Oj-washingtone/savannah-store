@@ -59,3 +59,38 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Deploy to Contabo VPS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.CONTABO_HOST }}
+          username: root
+          key: ${{ secrets.VPS_SSH_KEY }}
+
+          script: |
+            mkdir -p /opt/savannah-store
+            cd /opt/savannah-store
+
+            #Create ENV
+            echo "DB_USER=${{ secrets.DB_USER }}" > .env.prod
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env.prod
+            echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env.prod
+            echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.prod
+            echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env.prod
+
+            echo "AUTH0_DOMAIN=${{ secrets.AUTH0_DOMAIN }}" >> .env.prod
+            echo "AUTH0_CLIENT_ID=${{ secrets.AUTH0_CLIENT_ID }}" >> .env.prod
+            echo "AUTH0_CLIENT_SECRET=${{ secrets.AUTH0_CLIENT_SECRET }}" >> .env.prod
+            echo "AUTH0_CALLBACK_URL=${{ secrets.AUTH0_CALLBACK_URL }}" >> .env.prod
+
+            echo "RESEND_KEY=${{ secrets.RESEND_KEY }}" >> .env.prod
+            echo "ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}" >> .env.prod
+
+            echo "AFRICASTALKING_API_KEY=${{ secrets.AFRICASTALKING_API_KEY }}" >> .env.prod
+            echo "AFRICASTALKING_URL=${{ secrets.AFRICASTALKING_URL }}" >> .env.prod
+            echo "AFRICASTALKING_USERNAME=${{ secrets.AFRICASTALKING_USERNAME }}" >> .env.prod
+
+            # Pull the latest image and deploy with Docker Compose
+            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+            docker compose -f docker-compose.prod.yml --env-file .env.prod pull
+            docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --force-recreate
