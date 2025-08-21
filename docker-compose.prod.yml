@@ -36,8 +36,8 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
     entrypoint: >
-      sh -c "migrate -path=/migrations
-             -database postgres://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}?sslmode=disable up"
+      sh -c "until pg_isready -h db -p 5432; do echo 'waiting for db...'; sleep 2; done;
+         migrate -path=/migrations -database postgres://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}?sslmode=disable up"
 
 volumes:
   db-data:
